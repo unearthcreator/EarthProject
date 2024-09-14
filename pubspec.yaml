@@ -30,12 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: ^2.0.0   # Riverpod for state management
-  hive: ^2.0.0               # Hive for local storage
-  hive_flutter: ^1.0.0       # Hive Flutter integration
-  freezed_annotation: ^2.4.4 # Freezed for data classes
-  dio: ^5.0.0                # Dio for API requests
-  flutter_svg: ^2.0.10+1        # For displaying SVG map
+  flutter_riverpod: ^2.0.0
+  hive: ^2.0.0
+  hive_flutter: ^1.0.0
+  freezed_annotation: ^2.4.4
+  dio: ^5.0.0
+  flutter_svg: ^2.0.10+1
+  logger: ^2.4.0  # Update to the latest version
 
 
   # The following adds the Cupertino Icons font to your application.
