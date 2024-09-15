@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:map_mvp_project/maps/map_utils/map_transformation_controller.dart';
+import 'package:map_mvp_project/map_core/map_utils/map_transformation_controller.dart';
 
 class ZoomIndicator extends StatelessWidget {
   final MapTransformationController mapController;

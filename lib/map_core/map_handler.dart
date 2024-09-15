@@ -1,10 +1,7 @@
 import 'dart:async'; // For TimeoutException
 import 'package:flutter/material.dart';
 import 'package:map_mvp_project/services/error_handler.dart';
-import 'package:map_mvp_project/map_core/map_utils/map_transformation_controller.dart';
-import 'package:map_mvp_project/map_core/map_utils/map_image_loader.dart';
-import 'package:map_mvp_project/map_core/map_utils/zoom_indicator.dart';
-import 'package:map_mvp_project/map_core/map_utils/close_button.dart'; // Import CloseButtonWidget
+import 'package:map_mvp_project/map_core/all_map_utils.dart'; // Import all map utilities
 
 class MapHandler extends StatefulWidget {
   const MapHandler({super.key});
