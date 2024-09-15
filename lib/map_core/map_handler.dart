@@ -1,29 +1,33 @@
 import 'dart:async'; // For TimeoutException
 import 'package:flutter/material.dart';
-import 'package:map_mvp_project/services/error_handler.dart'; // Import logger
-import 'package:map_mvp_project/map_core/map_utils/map_transformation_controller.dart'; 
-import 'package:map_mvp_project/map_core/map_utils/map_image_loader.dart'; 
-import 'package:map_mvp_project/map_core/map_utils/zoom_indicator.dart'; 
+import 'package:map_mvp_project/services/error_handler.dart';
+import 'package:map_mvp_project/map_core/map_utils/map_transformation_controller.dart';
+import 'package:map_mvp_project/map_core/map_utils/map_image_loader.dart';
+import 'package:map_mvp_project/map_core/map_utils/zoom_indicator.dart';
+import 'package:map_mvp_project/map_core/map_utils/close_button.dart'; // Import CloseButtonWidget
 
 class MapHandler extends StatefulWidget {
   const MapHandler({super.key});
 
   @override
-  _MapHandlerState createState() => _MapHandlerState();
+  MapHandlerState createState() => MapHandlerState();
 }
 
-class _MapHandlerState extends State<MapHandler> {
+class MapHandlerState extends State<MapHandler> {
   final MapTransformationController _mapController = MapTransformationController();
   static const double _boundaryMargin = 0.0;
   static const double _minScale = 0.5;
   static const double _maxScale = 4.0;
 
   @override
+  void dispose() {
+    _mapController.dispose(); // Clean up controller
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map Viewer'),
-      ),
       body: Stack(
         children: [
           Center(
@@ -35,6 +39,11 @@ class _MapHandlerState extends State<MapHandler> {
               child: _buildMap(context),
             ),
           ),
+          CloseButtonWidget(
+            onPressed: () {
+              Navigator.of(context).pop(); // Go back to HomePage
+            },
+          ),
           ZoomIndicator(mapController: _mapController),
         ],
       ),
@@ -43,24 +52,26 @@ class _MapHandlerState extends State<MapHandler> {
 
   Widget _buildMap(BuildContext context) {
     return FutureBuilder(
-      future: loadSvg('assets/maps/map_placeholder.svg'), // Use the image loader
+      future: loadSvg('assets/maps/map_placeholder.svg'),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Loading spinner
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           String errorMessage = _getErrorMessage(snapshot.error);
           logger.e('Failed to load map', error: snapshot.error, stackTrace: snapshot.stackTrace);
           return Center(
             child: Text(errorMessage),
           );
+        } else if (snapshot.hasData && snapshot.data != null) {
+          // Safely cast snapshot.data to Widget if it's not null
+          return snapshot.data as Widget;
         } else {
-          return snapshot.data as Widget; // Show the loaded map
+          return const Center(child: Text('Failed to load map. No data available.'));
         }
       },
     );
   }
 
-  // Improved error handling to provide specific feedback
   String _getErrorMessage(Object? error) {
     if (error is TimeoutException) {
       return 'Map loading took too long. Please try again.';
