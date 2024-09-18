@@ -14,10 +14,12 @@ final mapControllerProvider = Provider.autoDispose<TransformationController>((re
   }
 });
 
-// Define a FutureProvider for loading the SVG map
+// Define a FutureProvider for loading the SVG map using the updated loader
 final mapSvgProvider = FutureProvider<Widget>((ref) async {
   try {
-    return await loadSvg('assets/maps/map_placeholder.svg');
+    // Updated to load the actual map asset from /libs/map_core/maps
+    logger.i('Attempting to load SVG map from lib/map_core/maps/Transparent_SVG.svg');
+    return await loadSvg('lib/map_core/maps/Transparent_SVG.svg');
   } catch (error, stackTrace) {
     logger.e('Failed to load map', error: error, stackTrace: stackTrace);
     rethrow; // Use rethrow instead of throw to propagate the error
@@ -29,6 +31,8 @@ class MapHandler extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logger.i("MapHandler build method is called"); // Added logging to verify it's loaded
+
     // Watch the TransformationController from the provider
     final mapController = ref.watch(mapControllerProvider);
 
@@ -57,7 +61,7 @@ class MapHandler extends ConsumerWidget {
         child: mapSvg.when(
           loading: () => const CircularProgressIndicator(),
           error: (error, stack) => _buildErrorWidget(error, stack), // Refactored error handling
-          data: (svgWidget) => svgWidget,
+          data: (svgWidget) => svgWidget, // Removed unnecessary null check
         ),
       ),
     );
