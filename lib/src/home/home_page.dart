@@ -1,71 +1,74 @@
-import 'dart:async'; // For TimeoutException
 import 'package:flutter/material.dart';
 import 'package:map_mvp_project/services/error_handler.dart'; // Import logger
-import 'package:map_mvp_project/map_core/map_utils/map_transformation_controller.dart'; 
-import 'package:map_mvp_project/map_core/map_utils/map_image_loader.dart'; 
-import 'package:map_mvp_project/map_core/map_utils/zoom_indicator.dart'; 
+import 'package:map_mvp_project/map_core/map_handler.dart'; // Import the map page
 
-class MapHandler extends StatefulWidget {
-  const MapHandler({super.key});
-
-  @override
-  _MapHandlerState createState() => _MapHandlerState();
-}
-
-class _MapHandlerState extends State<MapHandler> {
-  final MapTransformationController _mapController = MapTransformationController();
-  static const double _boundaryMargin = 0.0;
-  static const double _minScale = 0.5;
-  static const double _maxScale = 4.0;
+// The main HomePage widget
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map Viewer'),
+        title: const Text('Home Page'),
       ),
-      body: Stack(
-        children: [
-          Center(
-            child: InteractiveViewer(
-              boundaryMargin: const EdgeInsets.all(_boundaryMargin),
-              minScale: _minScale,
-              maxScale: _maxScale,
-              transformationController: _mapController.controller,
-              child: _buildMap(context),
-            ),
-          ),
-          ZoomIndicator(mapController: _mapController),
-        ],
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            WelcomeMessage(),  // Added const here
+            SizedBox(height: 20),  // Added const here
+            ContinueButton(),  // Added const here
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildMap(BuildContext context) {
-    return FutureBuilder(
-      future: loadSvg('assets/maps/map_placeholder.svg'), // Use the image loader
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Loading spinner
-        } else if (snapshot.hasError) {
-          String errorMessage = _getErrorMessage(snapshot.error);
-          logger.e('Failed to load map', error: snapshot.error, stackTrace: snapshot.stackTrace);
-          return Center(
-            child: Text(errorMessage),
-          );
-        } else {
-          return snapshot.data as Widget; // Show the loaded map
-        }
+// Extracted WelcomeMessage widget
+class WelcomeMessage extends StatelessWidget {
+  const WelcomeMessage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Welcome to the Map MVP Project!',
+      style: TextStyle(fontSize: 24),
+    );
+  }
+}
+
+// Extracted ContinueButton widget with error handling
+class ContinueButton extends StatelessWidget {
+  const ContinueButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _handleButtonPress(context);
       },
+      child: const Text('Continue'),
     );
   }
 
-  // Improved error handling to provide specific feedback
-  String _getErrorMessage(Object? error) {
-    if (error is TimeoutException) {
-      return 'Map loading took too long. Please try again.';
-    } else {
-      return 'An unexpected error occurred. Please try again.';
+  // Function to handle the button press
+  void _handleButtonPress(BuildContext context) {
+    try {
+      // Log button press
+      logger.i('Continue button pressed');
+      
+      // Navigate to the map page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MapHandler()), // Added const here
+      );
+    } catch (e, stackTrace) {
+      logger.e('Error during button press', error: e, stackTrace: stackTrace);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
     }
   }
 }

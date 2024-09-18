@@ -30,7 +30,7 @@ class MapHandler extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch the TransformationController from the provider
-    final mapController = ref.watch(mapControllerProvider); // Removed the underscore, since it's local
+    final mapController = ref.watch(mapControllerProvider);
 
     // Watch the SVG loading process from the mapSvgProvider
     final mapSvg = ref.watch(mapSvgProvider);
@@ -38,38 +38,43 @@ class MapHandler extends ConsumerWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Center(
-            child: InteractiveViewer(
-              boundaryMargin: const EdgeInsets.all(0.0),
-              minScale: 0.5,
-              maxScale: 4.0,
-              transformationController: mapController,
-              child: mapSvg.when(
-                loading: () => const CircularProgressIndicator(),
-                error: (error, stack) {
-                  // Log the error
-                  logger.e('Error displaying the map', error: error, stackTrace: stack);
-
-                  // Display a user-friendly message
-                  final errorMessage = _getErrorMessage(error);
-                  return Center(child: Text(errorMessage));
-                },
-                data: (svgWidget) => svgWidget,
-              ),
-            ),
-          ),
-          CloseButtonWidget(
-            onPressed: () {
-              // Safely pop the navigation stack
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-            },
-          ),
+          _buildMapView(mapController, mapSvg), // Refactored map view construction
+          CloseButtonWidget(onPressed: () => _handleBackNavigation(context)), // Refactored back navigation
           ZoomIndicator(controller: mapController),
         ],
       ),
     );
+  }
+
+  // Refactored map view logic to improve readability
+  Widget _buildMapView(TransformationController mapController, AsyncValue<Widget> mapSvg) {
+    return Center(
+      child: InteractiveViewer(
+        boundaryMargin: const EdgeInsets.all(0.0),
+        minScale: 0.5,
+        maxScale: 4.0,
+        transformationController: mapController,
+        child: mapSvg.when(
+          loading: () => const CircularProgressIndicator(),
+          error: (error, stack) => _buildErrorWidget(error, stack), // Refactored error handling
+          data: (svgWidget) => svgWidget,
+        ),
+      ),
+    );
+  }
+
+  // Refactored error handling into its own method
+  Widget _buildErrorWidget(Object error, StackTrace stack) {
+    logger.e('Error displaying the map', error: error, stackTrace: stack);
+    final errorMessage = _getErrorMessage(error);
+    return Center(child: Text(errorMessage));
+  }
+
+  // Refactored back navigation logic into its own method
+  void _handleBackNavigation(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
   }
 
   // Improved error handling to provide specific feedback
