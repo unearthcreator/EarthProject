@@ -43,7 +43,7 @@ class MapHandler extends ConsumerWidget {
       body: Stack(
         children: [
           _buildMapView(mapController, mapSvg), // Refactored map view construction
-          CloseButtonWidget(onPressed: () => _handleBackNavigation(context)), // Refactored back navigation
+          CloseButtonWidget(onPressed: () => _handleBackNavigation(context)), // Close button integration
           ZoomIndicator(controller: mapController),
         ],
       ),
@@ -77,7 +77,7 @@ class MapHandler extends ConsumerWidget {
   // Refactored back navigation logic into its own method
   void _handleBackNavigation(BuildContext context) {
     if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // This will pop the map page and go back to the home page
     }
   }
 
