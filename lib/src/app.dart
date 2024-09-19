@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:map_mvp_project/src/home/home_page.dart'; // Import the HomePage widget
+import 'package:map_mvp_project/src/starting_pages/home/home_page.dart'; // Import the HomePage widget
 import 'package:map_mvp_project/services/error_handler.dart'; // Import logger for error handling
 
 

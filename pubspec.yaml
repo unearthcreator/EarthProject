@@ -70,6 +70,12 @@ flutter:
 
   assets:
     - lib/map_core/maps/Transparent_SVG.svg
+    - lib/map_core/maps/Earth1_Pseudo_Marcader_png.png
+    - lib/map_core/maps/Earth1_Pseudo_Marcader.svg
+    - lib/map_core/maps/Earth1_Pseudo_Marcader_lowDPI.svg
+  
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
