@@ -13,7 +13,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _current = 0;
+  // Set initialPage to 4 (Card 5) and initialize _current accordingly
+  final int initialPage = 4;
+  int _current = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -23,65 +25,73 @@ class _HomePageState extends State<HomePage> {
     final double availableHeight = screenHeight - 56 - 40; // 40 for padding/margins
 
     return Scaffold(
-      
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-        children: [
-          CarouselSlider.builder(
-            itemCount: 10, // Total number of cards
-            options: CarouselOptions(
-              height: availableHeight * 0.9, // 90% of available height
-              enlargeCenterPage: true,
-              enlargeStrategy: CenterPageEnlargeStrategy.scale,
-              enableInfiniteScroll: false,
-              viewportFraction: 0.35, // Adjusted for A4 proportions
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              },
-            ),
-            itemBuilder: (context, index, realIdx) {
-              // Determine the opacity based on the current index
-              double opacity = 0.2;
-              if (index == _current) {
-                opacity = 1.0;
-              }
+      appBar: AppBar(
+        title: const Text('Home Page'),
+        centerTitle: false, // Align title to the top left
+      ),
+      body: Center( // Center widget to center the carousel vertically
+        child: CarouselSlider.builder(
+          itemCount: 10, // Total number of cards
+          options: CarouselOptions(
+            initialPage: initialPage, // Center on card number 5 initially
+            height: availableHeight * 0.9, // 90% of available height
+            enlargeCenterPage: true,
+            enlargeStrategy: CenterPageEnlargeStrategy.scale,
+            enableInfiniteScroll: false,
+            viewportFraction: 0.35, // Adjusted for A4 proportions
+            onPageChanged: (index, reason) {
+              setState(() {
+                _current = index;
+              });
+            },
+          ),
+          itemBuilder: (context, index, realIdx) {
+            // Determine the opacity based on the current index
+            double opacity = 0.2;
+            if (index == _current) {
+              opacity = 1.0;
+            }
 
-              return Opacity(
-                opacity: opacity,
-                child: AspectRatio(
-                  aspectRatio: 1 / 1.3, // A4 proportions (width : height)
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 3), // Adjust margin here
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                      color: Colors.blueAccent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Card ${index + 1}',
+            return Opacity(
+              opacity: opacity,
+              child: AspectRatio(
+                aspectRatio: 1 / 1.3, // A4 proportions (width : height)
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 3), // Adjust margin here
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                    color: Colors.blueAccent,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // Center content vertically within the card
+                    children: [
+                      // Removed the 'Card #` Text Widget
+                      // Title Text
+                      Text(
+                        index == initialPage ? 'History Tour' : 'Unearth', // Custom title for Card 5, default for others
                         style: const TextStyle(
-                          fontSize: 24.0,
+                          fontSize: 24.0, // Increased font size for prominence
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 8), // Spacing between title and optional future elements
+                      // TODO: Make titles dynamic based on user input in the future
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
