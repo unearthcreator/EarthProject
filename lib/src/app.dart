@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const HomePage(), // Home page as the initial route
         },
+        debugShowCheckedModeBanner: false, // Removes the Debug banner
       );
     } catch (e, stackTrace) {
       logger.e('Error while building MyApp widget', error: e, stackTrace: stackTrace);

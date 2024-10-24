@@ -28,6 +28,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Home Page'),
         centerTitle: false, // Align title to the top left
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings), // Settings icon (cogwheel)
+            onPressed: () {
+              // For now, it doesn't do anything. You can add functionality here later
+              // TODO: Add navigation to settings page in the future
+            },
+          ),
+        ],
       ),
       body: Center( // Center widget to center the carousel vertically
         child: CarouselSlider.builder(
@@ -73,7 +82,6 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center, // Center content vertically within the card
                     children: [
-                      // Removed the 'Card #` Text Widget
                       // Title Text
                       Text(
                         index == initialPage ? 'History Tour' : 'Unearth', // Custom title for Card 5, default for others
