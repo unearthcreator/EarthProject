@@ -3,13 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:map_mvp_project/src/app.dart'; // Your app file
 import 'package:map_mvp_project/services/error_handler.dart'; // Import error handling and logger
 import 'package:map_mvp_project/services/orientation_util.dart'; // Import orientation utility
+import 'package:flutter/services.dart';
 
 void main() {
   // Setup error handling for Flutter framework and async errors
   setupErrorHandling();
 
+
   // Start app initialization with error handling
   runAppWithErrorHandling(_initializeApp);  // Now calling the private function
+
+    // Hide the status bar
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 }
 
 // App initialization function (private)

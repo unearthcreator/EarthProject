@@ -23,10 +23,7 @@ class _HomePageState extends State<HomePage> {
     final double availableHeight = screenHeight - 56 - 40; // 40 for padding/margins
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-        centerTitle: false, // Align title to the top left
-      ),
+      
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center, // Center vertically
         children: [
