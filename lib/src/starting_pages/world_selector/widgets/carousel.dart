@@ -1,56 +1,42 @@
 // carousel.dart
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart'; // Import carousel_slider
-import 'package:map_mvp_project/services/error_handler.dart'; // Import logger
-import 'package:map_mvp_project/src/starting_pages/world_selector/widgets/widget_utils/card_dialog.dart'; // Import dialog from widget_util
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:map_mvp_project/services/error_handler.dart';
+import 'package:map_mvp_project/src/starting_pages/world_selector/widgets/widget_utils/card_tap_handler.dart'; // Import tap handler
 
-class CarouselWidget extends StatefulWidget {
-  final double availableHeight; // Accept available height as a parameter
+class CarouselWidget extends StatelessWidget {
+  final double availableHeight;
 
   const CarouselWidget({super.key, required this.availableHeight});
-
-  @override
-  _CarouselWidgetState createState() => _CarouselWidgetState();
-}
-
-class _CarouselWidgetState extends State<CarouselWidget> {
-  int _currentIndex = 4; // Initial center card index
 
   @override
   Widget build(BuildContext context) {
     logger.i('Building CarouselWidget');
 
     return CarouselSlider.builder(
-      itemCount: 10, // Total number of cards
+      itemCount: 10,
       options: CarouselOptions(
-        initialPage: _currentIndex, // Start with card 5 centered
-        height: widget.availableHeight * 0.9, // 90% of available height
+        initialPage: 4,
+        height: availableHeight * 0.9,
         enlargeCenterPage: true,
         enlargeStrategy: CenterPageEnlargeStrategy.scale,
         enableInfiniteScroll: false,
-        viewportFraction: 0.35, // Adjusted for A4 proportions
+        viewportFraction: 0.35,
         onPageChanged: (index, reason) {
-          setState(() {
-            _currentIndex = index; // Update the currently centered card
-          });
           logger.i('Carousel page changed to index $index, reason: $reason');
         },
       ),
       itemBuilder: (context, index, realIdx) {
-        // Set opacity based on whether the card is centered
-        double opacity = index == _currentIndex ? 1.0 : 0.2;
+        double opacity = index == 4 ? 1.0 : 0.2;
 
         return GestureDetector(
-          onTap: () {
-            // Use the extracted showCardDialog function
-            showCardDialog(context, index);
-          },
+          onTap: () => handleCardTap(context, index), // Use the tap handler
           child: Opacity(
             opacity: opacity,
             child: AspectRatio(
-              aspectRatio: 1 / 1.3, // A4 proportions (width : height)
+              aspectRatio: 1 / 1.3,
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3), // Adjust margin here
+                margin: const EdgeInsets.symmetric(horizontal: 3),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
@@ -65,7 +51,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 ),
                 child: Center(
                   child: Text(
-                    index == 4 ? 'History Tour' : 'Unearth', // Custom title for Card 5, default for others
+                    index == 4 ? 'History Tour' : 'Unearth',
                     style: const TextStyle(
                       fontSize: 24.0,
                       color: Colors.white,

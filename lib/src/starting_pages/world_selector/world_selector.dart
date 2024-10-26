@@ -9,19 +9,20 @@ class WorldSelectorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Log that WorldSelectorPage is being built
     logger.i('Building WorldSelectorPage widget');
-    
+
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double availableHeight = screenHeight - 56 - 40; // Adjust height
+    final double availableHeight = screenHeight - 56 - 40;
 
     return Scaffold(
       body: Column(
         children: [
-          const WorldSelectorButtons(), // Custom header with back arrow and settings icon
+          const WorldSelectorButtons(),
           Expanded(
             child: Center(
-              child: CarouselWidget(availableHeight: availableHeight),
+              child: CarouselWidget(
+                availableHeight: availableHeight,
+              ),
             ),
           ),
         ],

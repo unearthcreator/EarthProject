@@ -4,16 +4,20 @@ import 'package:map_mvp_project/src/app.dart'; // Your app file
 import 'package:map_mvp_project/services/error_handler.dart'; // Import error handling and logger
 import 'package:map_mvp_project/services/orientation_util.dart'; // Import orientation utility
 import 'package:flutter/services.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 void main() {
   // Setup error handling for Flutter framework and async errors
   setupErrorHandling();
 
-
   // Start app initialization with error handling
   runAppWithErrorHandling(_initializeApp);  // Now calling the private function
 
     // Hide the status bar
+
+  String ACCESS_TOKEN = const String.fromEnvironment("ACCESS_TOKEN");
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
+  
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 }
 
