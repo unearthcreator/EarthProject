@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // Import carousel_slider
 import 'package:map_mvp_project/services/error_handler.dart'; // Import logger
-import 'package:map_mvp_project/src/starting_pages/home/widgets/widget_utils/card_dialog.dart'; // Import dialog from widget_util
+import 'package:map_mvp_project/src/starting_pages/world_selector/widgets/widget_utils/card_dialog.dart'; // Import dialog from widget_util
 
 class CarouselWidget extends StatefulWidget {
   final double availableHeight; // Accept available height as a parameter

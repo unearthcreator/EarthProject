@@ -1,7 +1,8 @@
+// app.dart
 import 'package:flutter/material.dart';
-import 'package:map_mvp_project/src/starting_pages/home/home_page.dart'; // Import the HomePage widget
+import 'package:map_mvp_project/src/starting_pages/main_menu/main_menu.dart'; // Import MainMenuPage as initial screen
+import 'package:map_mvp_project/src/starting_pages/world_selector/world_selector.dart'; // Import WorldSelectorPage
 import 'package:map_mvp_project/services/error_handler.dart'; // Import logger for error handling
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,9 +13,10 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         title: 'Map MVP Project',
         theme: _buildAppTheme(), // Extracted theme to a separate function for cleaner code
-        initialRoute: '/', // Define the initial route (HomePage)
+        initialRoute: '/', // Define the initial route (MainMenuPage)
         routes: {
-          '/': (context) => const HomePage(), // Home page as the initial route
+          '/': (context) => const MainMenuPage(), // Set MainMenuPage as initial route
+          '/world_selector': (context) => const WorldSelectorPage(), // Define route for WorldSelectorPage
         },
         debugShowCheckedModeBanner: false, // Removes the Debug banner
       );
