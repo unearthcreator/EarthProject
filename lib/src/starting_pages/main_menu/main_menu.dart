@@ -1,5 +1,5 @@
-// main_menu.dart
 import 'package:flutter/material.dart';
+import 'package:map_mvp_project/src/starting_pages/main_menu/widgets/menu_button.dart'; // Corrected import path
 
 class MainMenuPage extends StatelessWidget {
   const MainMenuPage({super.key});
@@ -7,42 +7,37 @@ class MainMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900], // Dark, map-themed background color
+      backgroundColor: Colors.blueGrey[900],
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildMenuButton(
-              context,
-              icon: Icons.public, // Globe icon
+            MenuButton(
+              icon: Icons.public,
               label: 'Go to Worlds',
               onPressed: () {
-                // Navigate to WorldSelectorPage via named route
                 Navigator.pushNamed(context, '/world_selector');
               },
             ),
             const SizedBox(height: 20),
-            _buildMenuButton(
-              context,
-              icon: Icons.settings, // Gear icon
+            MenuButton(
+              icon: Icons.settings,
               label: 'Options',
               onPressed: () {
                 // Placeholder for Options functionality
               },
             ),
             const SizedBox(height: 20),
-            _buildMenuButton(
-              context,
-              icon: Icons.star, // Star icon for subscription
+            MenuButton(
+              icon: Icons.star,
               label: 'Subscription',
               onPressed: () {
                 // Placeholder for Subscription functionality
               },
             ),
             const SizedBox(height: 20),
-            _buildMenuButton(
-              context,
-              icon: Icons.exit_to_app, // Exit icon
+            MenuButton(
+              icon: Icons.exit_to_app,
               label: 'Exit',
               onPressed: () {
                 // Placeholder for exit functionality
@@ -50,35 +45,6 @@ class MainMenuPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Helper method to build menu buttons with fixed size
-  Widget _buildMenuButton(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return SizedBox(
-      width: 250, // Fixed width for all buttons
-      height: 60,  // Fixed height for all buttons
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          backgroundColor: Colors.blueGrey[700], // Button color to match theme
-          foregroundColor: Colors.white, // Text and icon color
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16), // Rounded corners
-          ),
-        ),
-        icon: Icon(icon, size: 24),
-        label: Text(
-          label,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        onPressed: onPressed,
       ),
     );
   }
