@@ -1,6 +1,9 @@
 // map_widget_with_zoom.dart
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:map_mvp_project/src/earth_pages/utils/map_gestures.dart';
+import 'package:map_mvp_project/src/earth_pages/utils/map_state_manager.dart';
+import 'package:map_mvp_project/src/earth_pages/utils/back_button_widget.dart';
 
 class MapWidgetWithZoom extends StatefulWidget {
   const MapWidgetWithZoom({super.key});
@@ -11,7 +14,13 @@ class MapWidgetWithZoom extends StatefulWidget {
 
 class _MapWidgetWithZoomState extends State<MapWidgetWithZoom> {
   late MapboxMap _mapboxMap;
-  bool _isMapReady = false; // Track if the map is fully rendered
+  bool _isMapReady = false;
+
+  void _handleMapReady() {
+    setState(() {
+      _isMapReady = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +28,6 @@ class _MapWidgetWithZoomState extends State<MapWidgetWithZoom> {
       body: Stack(
         children: [
           MapWidget(
-            // Define initial camera options to set zoom level at the start
             cameraOptions: CameraOptions(
               center: Point(coordinates: Position(-98.0, 39.5)),
               zoom: 1.0,
@@ -30,41 +38,21 @@ class _MapWidgetWithZoomState extends State<MapWidgetWithZoom> {
             onMapCreated: (MapboxMap mapboxMap) {
               _mapboxMap = mapboxMap;
 
-              // Enable interactive zoom gestures after the map has been initialized
-              _mapboxMap.gestures.updateSettings(
-                GesturesSettings(
-                  pinchToZoomEnabled: true,
-                  quickZoomEnabled: true,
-                  scrollEnabled: true,
-                ),
-              );
+              // Apply gesture settings using the utility function
+              applyMapGestures(_mapboxMap);
 
-              // Indicate that the map is ready and update the UI
-              setState(() {
-                _isMapReady = true;
-              });
+              // Initialize MapStateManager to track readiness
+              MapStateManager(
+                mapboxMap: _mapboxMap,
+                onMapReady: _handleMapReady,
+              );
             },
           ),
           if (_isMapReady)
-            Positioned(
-              bottom: 20,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            BackButtonWidget(
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
         ],
       ),
