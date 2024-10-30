@@ -1,13 +1,19 @@
-// carousel.dart
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:map_mvp_project/services/error_handler.dart';
-import 'package:map_mvp_project/src/starting_pages/world_selector/widgets/widget_utils/card_tap_handler.dart'; // Import tap handler
+import 'package:map_mvp_project/src/starting_pages/world_selector/widgets/widget_utils/card_tap_handler.dart';
 
-class CarouselWidget extends StatelessWidget {
+class CarouselWidget extends StatefulWidget {
   final double availableHeight;
 
   const CarouselWidget({super.key, required this.availableHeight});
+
+  @override
+  _CarouselWidgetState createState() => _CarouselWidgetState();
+}
+
+class _CarouselWidgetState extends State<CarouselWidget> {
+  int _currentIndex = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +22,27 @@ class CarouselWidget extends StatelessWidget {
     return CarouselSlider.builder(
       itemCount: 10,
       options: CarouselOptions(
-        initialPage: 4,
-        height: availableHeight * 0.9,
+        initialPage: _currentIndex,
+        height: widget.availableHeight * 0.9,
         enlargeCenterPage: true,
         enlargeStrategy: CenterPageEnlargeStrategy.scale,
         enableInfiniteScroll: false,
         viewportFraction: 0.35,
         onPageChanged: (index, reason) {
+          setState(() {
+            _currentIndex = index;
+          });
           logger.i('Carousel page changed to index $index, reason: $reason');
         },
       ),
       itemBuilder: (context, index, realIdx) {
-        double opacity = index == 4 ? 1.0 : 0.2;
+        double opacity = index == _currentIndex ? 1.0 : 0.2;
 
         return GestureDetector(
-          onTap: () => handleCardTap(context, index), // Use the tap handler
+          onTap: () {
+            logger.i('Card at index $index tapped.');
+            handleCardTap(context, index);
+          },
           child: Opacity(
             opacity: opacity,
             child: AspectRatio(
